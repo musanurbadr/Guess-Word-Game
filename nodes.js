@@ -8,6 +8,7 @@ document.querySelector("footer").innerHTML = `${gameName} Game Created by cors`;
 let numberOfTries = 6;
 let numberOfLetters = 6;
 let currenrTry = 1;
+let numberOfHints = 2; 
 
 //Words magne 
 let wordToGuess = "";
@@ -15,6 +16,11 @@ const Words = ["Create", "Updete", "Delte" , "Master" , "boolss","noopss" , "sch
 wordToGuess = Words[Math.floor(Math.random() * Words.length )].toLowerCase();
 let messageArea = document.querySelector(".message");
 
+// Manage Hints
+document.querySelector(".hint span").innerHTML = numberOfHints ;
+
+const getHintButton = document.querySelector(".hint");
+getHintButton.addEventListener("click" , getHint );
 function genrateInput (){
     const inputsContainer = document.querySelector(".inputs");
     
@@ -101,8 +107,39 @@ function handleGusese(){
         guessButton.disabled = true; 
 
     }else{
-        console.log("not")
+        document.querySelector(`.try-${currenrTry}`).classList.add("disabled-inputs");
+        const currenrTryInput = document.querySelectorAll(`.try-${currenrTry} input`);
+        currenrTryInput.forEach((input) => (input.disabled = true));
+        
+        currenrTry++ ; 
+
+        const textTryInput = document.querySelectorAll(`.try-${currenrTry} input`);
+        textTryInput.forEach((input) => (input.disabled = false));
+
+        let el = document.querySelector(`.try-${currenrTry}`);
+        if (el){
+            document.querySelector(`.try-${currenrTry}`).classList.remove("disabled-inputs");
+            el.children[1].focus();
+        }else{
+            guessButton.disabled = true; 
+            messageArea.innerHTML = `You Lose The Word Is <span>${wordToGuess}</span>`
+        }
+        
     }
+}
+
+function getHint() {
+    if (numberOfHints > 0 ){
+        numberOfHints--;
+        document.querySelector(".hint sapn").innerHTML = numberOfHints;
+    }
+    if(numberOfHints === 0 ){
+        getHintButton.disabled = true ;
+    }
+    
+    //Geat 
+    const enabldl = document.querySelectorAll("input:not([disabled])");
+    console.log(enabldl);
 }
 window.onload = function(){
     genrateInput();
