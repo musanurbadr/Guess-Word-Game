@@ -3,6 +3,7 @@
 }
 :root{
     --primary-color: #e72e21;
+    /* --pramry1-color : green;  */
 }
 body{
     margin: 0;
@@ -139,7 +140,7 @@ h1{
         font-weight: bold; 
         display:block; 
         font-size: 50px;
-        color: var(--primary-color); 
+        color: var(--primary1-color); 
         text-transform: capitalize; 
         margin-top: 10px;
     }

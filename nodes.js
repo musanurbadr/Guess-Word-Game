@@ -98,14 +98,17 @@ function handleGusese(){
     //check of los win or laset
     if(successGuess){
         messageArea.innerHTML = `You win After <span>${wordToGuess}</span>`;
+        if (numberOfHints === 2){
+            messageArea.innerHTML = `<p>Congratz You didnt Use Hints</p>`
+        }
 
         // Disable All Input 
         let allris = document.querySelectorAll(".inputs > div");
         allris.forEach((tryDiv) => tryDiv.classList.add("disabled-inputs"));
 
+        getHintButton.disabled = true
         //Disball gus Button 
         guessButton.disabled = true; 
-
     }else{
         document.querySelector(`.try-${currenrTry}`).classList.add("disabled-inputs");
         const currenrTryInput = document.querySelectorAll(`.try-${currenrTry} input`);
@@ -120,8 +123,10 @@ function handleGusese(){
         if (el){
             document.querySelector(`.try-${currenrTry}`).classList.remove("disabled-inputs");
             el.children[1].focus();
+            
         }else{
             guessButton.disabled = true; 
+            getHintButton.disabled = true
             messageArea.innerHTML = `You Lose The Word Is <span>${wordToGuess}</span>`
         }
         
@@ -131,7 +136,7 @@ function handleGusese(){
 function getHint() {
     if (numberOfHints > 0 ){
         numberOfHints--;
-        document.querySelector(".hint sapn").innerHTML = numberOfHints;
+        document.querySelector(".hint span").innerHTML = numberOfHints;
     }
     if(numberOfHints === 0 ){
         getHintButton.disabled = true ;
@@ -139,8 +144,33 @@ function getHint() {
     
     //Geat 
     const enabldl = document.querySelectorAll("input:not([disabled])");
-    console.log(enabldl);
+    
+    const emptyEnableInputs = Array.from (enabldl).filter((input) => input.value === "");
+    // console.log(emptyEnableInputs);
+    if (emptyEnableInputs.length > 0 ){
+        const randomIndex = Math.floor(Math.random() * emptyEnableInputs.length );
+        const randomInput = emptyEnableInputs[randomIndex];
+        const indexToFile = Array.from(enabldl).indexOf(randomInput);
+        if (indexToFile !== -1) {
+            randomInput.value = wordToGuess[indexToFile].toUpperCase();
+        }
+    }
 }
+
+function handleBackspace (event){
+    if (event.key === "Backspace"){
+        const inputs = document.querySelectorAll("input:not([disabled])");
+        const currentIndex = Array.from(inputs).indexOf(document.activeElement);
+        if (currentIndex > 0 ){
+            const currenrTryInput = inputs[currentIndex];
+            const prevInput = inputs [currentIndex - 1 ];
+            prevInput.value = "";
+            prevInput.focus()
+        }
+    }
+}
+document.addEventListener("keydown" ,handleBackspace )
+
 window.onload = function(){
     genrateInput();
 };
